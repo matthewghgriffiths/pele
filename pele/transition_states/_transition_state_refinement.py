@@ -116,7 +116,8 @@ class FindTransitionState(object):
                  verbosity=1,
                  check_negative=True,
                  invert_gradient=False,
-                 hessian_diagonalization=False):
+                 hessian_diagonalization=False,
+                 quenchRoutine=None,):
         self.pot = pot
         self.coords = np.copy(coords)
         self.nfev = 0
@@ -134,7 +135,10 @@ class FindTransitionState(object):
             self.lowestEigenvectorQuenchParams = lowestEigenvectorQuenchParams
         self.max_uphill_step = max_uphill_step
         self.verbosity = verbosity
-        self.tangent_space_quencher = mylbfgs  # should make this passable
+        if quenchRoutine is None:
+            self.tangent_space_quencher = mylbfgs  # should make this passable
+        else:
+            self.tangent_space_quencher = quenchRoutine
         if tangentSpaceQuenchParams is None:
             self.tangent_space_quench_params = dict()
         else:

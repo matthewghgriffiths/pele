@@ -18,9 +18,13 @@ class _DimerTranslator(object):
     minimizer_kwargs : kwargs
         these kwargs are passed to the optimizer
     """
-    def __init__(self, coords, potential, eigenvec, **minimizer_kwargs):
+    def __init__(self, coords, potential, eigenvec, 
+                 quenchRoutine=None, **minimizer_kwargs):
         self.dimer_potential = _DimerPotential(potential, eigenvec)
-        self.minimizer = LBFGS(coords, self.dimer_potential, **minimizer_kwargs)
+        if quenchRoutine:
+            self.minimizer = quenchRoutine(coords, self.dimer_potential, **minimizer_kwargs)
+        else:
+            self.minimizer = LBFGS(coords, self.dimer_potential, **minimizer_kwargs)
 
     def stop_criterion_satisfied(self):
         """test if the stop criterion is satisfied"""

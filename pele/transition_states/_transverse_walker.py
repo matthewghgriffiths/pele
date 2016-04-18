@@ -80,16 +80,22 @@ class _TransverseWalker(object):
         these kwargs are passed to the minimizer
     
     """
-    def __init__(self, coords, potential, eigenvec, energy=None, gradient=None, **minimizer_kwargs):
+    def __init__(self, coords, potential, eigenvec, energy=None, gradient=None, 
+		 quenchRoutine=None, **minimizer_kwargs):
         self.tspot = _TransversePotential(potential, eigenvec)
         if energy is not None and gradient is not None:
             transverse_energy, transverse_gradient = self.tspot.projected_energy_gradient(energy, gradient)
         else:
             transverse_energy, transverse_gradient = None, None
-
-        self.walker = LBFGS(coords, self.tspot,
-                            energy=transverse_energy, gradient=transverse_gradient,
-                            **minimizer_kwargs)
+	
+	if quenchRoutine:
+	    self.walker = quenchRoutine(coords, self.tspot,
+					energy=transverse_energy, gradient=transverse_gradient,
+					**minimizer_kwargs)
+	else:
+	    self.walker = LBFGS(coords, self.tspot,
+	       		    energy=transverse_energy, gradient=transverse_gradient,
+			    **minimizer_kwargs)
     
     def update_eigenvec(self, eigenvec, eigenval):
         """update the vecotr"""

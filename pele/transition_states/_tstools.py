@@ -13,8 +13,9 @@ def determine_pushoff(
         pot, coords, vec, stepmin=.01, **unused_kwargs):
     """apply the pushoff along the direction vec
     """
-    if unused_kwargs:
-        print "keywords:", unused_kwargs.keys(), "are obsolete and ignored in determine_pushoff"
+    # Keywords used to control minimiser parameters
+    #if unused_kwargs:
+    #    print "keywords:", unused_kwargs.keys(), "are obsolete and ignored in determine_pushoff"
     return coords + stepmin * vec / np.linalg.norm(vec)
 
 #    if grad is None:

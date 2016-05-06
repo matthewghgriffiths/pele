@@ -61,8 +61,10 @@ def minima_from_ts(pot, xt, n=None, quench=None, stepmin=0.01, **kwargs):
         # if no direction is given, choose random direction
         n = vec_random_ndim(xt.size)
 
-    if quench is None:
-        quench = lambda coords: mylbfgs(coords, pot)
+    if quench:
+        quenchRoutine = lambda coords: quench(coords, pot=pot, **kwargs)
+    else:
+        quenchRoutine = lambda coords: mylbfgs(coords, pot=pot, **kwargs)
 
     x1 = determine_pushoff(pot, xt, n, stepmin=stepmin, **kwargs)
     x2 = determine_pushoff(pot, xt, -n, stepmin=stepmin, **kwargs)

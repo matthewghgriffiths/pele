@@ -166,7 +166,10 @@ class BaseSystem(object):
         """
         pot = self.get_potential()
         kwargs = dict_copy_update(self.params["structural_quench_params"], kwargs)
-        return lambda coords: lbfgs_cpp(coords, pot, **kwargs)
+        def minimizer(coords, pot=pot, **params):
+            kwargs.update(params)
+            return lbfgs_cpp(coords, pot, **kwargs)
+        return minimizer
 
     def get_compare_exact(self):
         """object that returns True if two structures are identical.
